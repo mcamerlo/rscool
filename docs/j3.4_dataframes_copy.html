@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Dataframes</title>
+
+<!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content=""/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+<!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+<style type="text/css">
+body {
+  padding-top: 60px;
+}
+</style>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/jquerylib/lib/3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/js/bootstrap.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/shim/html5shiv.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/jqueryui/jquery-ui.min.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/tocify/jquery.tocify.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/tocify/jquery.tocify.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/navigation-1.1/tabsets.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/highlightjs/default.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/highlightjs/highlight.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/fontawesome/css/all.css" rel="stylesheet" />
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/fontawesome/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="index.html" class="title">RSCool online</a>
+<a href="index.html">
+<i class="fa fa-home" aria-hidden="true"></i>
+</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+ARRANCANDO
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.0.1_pacotes_copy.html">Pacotes esenciais</a>
+<a href="j3.0.2_boaspraticas_copy.html">Boas práticas</a>
+<a href="j3.0.3_glossario_copy.html">Glossario básico</a>
+</div>
+</div>
+<a>
+<i class="fa fa-gear" aria-hidden="true"></i>
+</a>
+<a href="j3.1_linguagem_copy.html">FALANDO R</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+O 'WORKSPACE'
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.2_workspace_copy.html">Gestão do Workspace</a>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+GESTÃOSdosDADOS
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.3_variaveis_copy.html">Variables</a>
+<a href="j3.4_dataframes_copy.html">Dataframes</a>
+<hr/>
+<a href="3.5_tables_copy.html">Tables</a>
+<a href="j3.6_graficos_copy.html">Gráficos</a>
+</div>
+</div>
+<a>
+<i class="fa fa-gear" aria-hidden="true"></i>
+</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Univariada
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<span class="nav-dropdown-header">Qualitativa</span>
+<span class="nav-dropdown-header">Protocolo Qualitativa</span>
+<span class="nav-dropdown-header">Exemplo.0 Qualitativa</span>
+<hr/>
+<span class="nav-dropdown-header">Quantitativa</span>
+<span class="nav-dropdown-header">Protocolo Quantitativa</span>
+<span class="nav-dropdown-header">Exemplo.0 Quantitativa</span>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Bivariada
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<span class="nav-dropdown-header">Quali/Quali</span>
+<span class="nav-dropdown-header">Protocolo Quali/Quali</span>
+<span class="nav-dropdown-header">Exemplo.0 Quali/Quali</span>
+<hr/>
+<span class="nav-dropdown-header">Quali/Quanti</span>
+<span class="nav-dropdown-header">Protocolo Quali/Quanti</span>
+<span class="nav-dropdown-header">Exemplo.0 Quali/Quanti</span>
+<hr/>
+<span class="nav-dropdown-header">Quanti/Quanti</span>
+<span class="nav-dropdown-header">Protocolo Quanti/Quanti</span>
+<span class="nav-dropdown-header">Exemplo.0 Quanti/Quanti</span>
+</div>
+</div>
+</div>
+<div class="nav-right">
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    ARRANCANDO
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.0.1_pacotes_copy.html">Pacotes esenciais</a>
+    </li>
+    <li>
+      <a href="j3.0.2_boaspraticas_copy.html">Boas práticas</a>
+    </li>
+    <li>
+      <a href="j3.0.3_glossario_copy.html">Glossario básico</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a>
+    <span class="fa fa-gear"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="j3.1_linguagem_copy.html">FALANDO R</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    O 'WORKSPACE'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.2_workspace_copy.html">Gestão do Workspace</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GESTÃOSdosDADOS
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.3_variaveis_copy.html">Variables</a>
+    </li>
+    <li>
+      <a href="j3.4_dataframes_copy.html">Dataframes</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="3.5_tables_copy.html">Tables</a>
+    </li>
+    <li>
+      <a href="j3.6_graficos_copy.html">Gráficos</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a>
+    <span class="fa fa-gear"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Univariada
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Qualitativa</li>
+    <li class="dropdown-header">Protocolo Qualitativa</li>
+    <li class="dropdown-header">Exemplo.0 Qualitativa</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quantitativa</li>
+    <li class="dropdown-header">Protocolo Quantitativa</li>
+    <li class="dropdown-header">Exemplo.0 Quantitativa</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Bivariada
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Quali/Quali</li>
+    <li class="dropdown-header">Protocolo Quali/Quali</li>
+    <li class="dropdown-header">Exemplo.0 Quali/Quali</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quali/Quanti</li>
+    <li class="dropdown-header">Protocolo Quali/Quanti</li>
+    <li class="dropdown-header">Exemplo.0 Quali/Quanti</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quanti/Quanti</li>
+    <li class="dropdown-header">Protocolo Quanti/Quanti</li>
+    <li class="dropdown-header">Exemplo.0 Quanti/Quanti</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Dataframes</h1>
+
+</div>
+
+
+<div id="app.3-dataframes" class="section level1">
+<h1>App.3: Dataframes</h1>
+<ul>
+<li>Criação de uma base</li>
+</ul>
+<pre class="r"><code>Df &lt;-data.frame (
+            id = c(1, 2, 3, 3, 5),
+            cigarros = c(15, 19, 14, 12, 15),
+            sexo = c(0, 1, 1, 0,0),
+            cidade = c(&quot;Lisboa&quot;, &quot;Lisboa&quot;, &quot;Porto&quot;, &quot;Lisboa&quot;, &quot;Portimão&quot;),
+            grupo = c(&quot;A&quot;, &quot;C&quot;, &quot;C&quot;, &quot;B&quot;, &quot;B&quot;),
+            stress = c (4,4,2,1,39))</code></pre>
+<div id="exploração-dataset" class="section level2">
+<h2>Exploração Dataset</h2>
+<pre class="r"><code>class (Df)     # classe</code></pre>
+<pre class="r"><code>nrow (Df) # número de linhas       </code></pre>
+<pre class="r"><code>ncol (Df)   # número de colunas    </code></pre>
+<pre class="r"><code>dim(Df)  # dimensão (linhas &amp; colunas)   </code></pre>
+<pre class="r"><code>names (Df)  # nome das variáveis da base      </code></pre>
+<pre class="r"><code>head (Df, 3)  # Primeiras 13 observações    </code></pre>
+<pre class="r"><code>tail (Df, 2)     # Ultimas 10 observações    </code></pre>
+<pre class="r"><code>str (Df) # Estrutura da base     </code></pre>
+<pre class="r"><code>object.size(Df) # tamanho em bytes</code></pre>
+<pre class="r"><code>summary(Df)     # Summario para cada variável     </code></pre>
+</div>
+<div id="parênteses-retos-sobre-bases-de-dados" class="section level2">
+<h2>Parênteses retos sobre bases de dados</h2>
+<pre class="r"><code>Df [1  , ]      # linha 1       , colunas todas</code></pre>
+<pre class="r"><code>Df [ ,3 ]        # linhas todas, coluna 3</code></pre>
+<pre class="r"><code>Df [1  ,3 ]         #  linha 1      , coluna 3</code></pre>
+<pre class="r"><code>Df [1:4, ]  # linhas 1 a 4  , colunas todas</code></pre>
+<pre class="r"><code>Df [ , 2:5]     # linhas todas  , colunas 2 a 5</code></pre>
+<pre class="r"><code>Df [c(1,2,3,4), c(2,3,4,5)]</code></pre>
+<pre class="r"><code>Df [  ,-c(1,2)]  # linhas todas, colunas todas menos 1 e 2</code></pre>
+<p><br></p>
+</div>
+<div id="ids-duplicados" class="section level2">
+<h2>id’s duplicados</h2>
+<div id="deteção-dos-ids-duplicados" class="section level3">
+<h3>Deteção dos id’s duplicados</h3>
+<pre class="r"><code>tmm &lt;- table (Df$id)   ; tmm &lt;- as.data.frame(tmm)
+Ncases &lt;-max(tmm$Freq)
+ifelse (Ncases==1, &quot;OK, no double id&quot;, &quot;Double id detected.&quot;)</code></pre>
+<pre><code>## [1] &quot;Double id detected.&quot;</code></pre>
+<p><br></p>
+</div>
+<div id="identificar-ids-duplicado" class="section level3">
+<h3>Identificar id’s duplicado</h3>
+<pre class="r"><code>qqq &lt;- Df$id[tmm$Freq&gt;1]
+Df[which(Df$id==qqq),]</code></pre>
+<pre><code>##   id cigarros sexo cidade grupo stress
+## 3  3       14    1  Porto     C      2
+## 4  3       12    0 Lisboa     B      1</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="linhas-duplicados" class="section level2">
+<h2>linhas duplicados</h2>
+<div id="detetar-linhas-duplicadas-duplicated-rows" class="section level3">
+<h3>Detetar linhas duplicadas (duplicated rows)</h3>
+<pre class="r"><code>a &lt;- c(rep(&quot;A&quot;, 3), rep(&quot;B&quot;, 3), rep(&quot;C&quot;,2))
+b &lt;- c(1,1,2,4,1,1,2,2)
+Df2 &lt;-data.frame(a,b)
+Df2</code></pre>
+<pre><code>##   a b
+## 1 A 1
+## 2 A 1
+## 3 A 2
+## 4 B 4
+## 5 B 1
+## 6 B 1
+## 7 C 2
+## 8 C 2</code></pre>
+</div>
+<div id="listar-linhas-duplicados" class="section level3">
+<h3>Listar linhas duplicados…</h3>
+<pre class="r"><code>Df2[duplicated(Df2), ]</code></pre>
+<pre><code>##   a b
+## 2 A 1
+## 6 B 1
+## 8 C 2</code></pre>
+<p><br></p>
+</div>
+<div id="listar-linhas-não-duplicados" class="section level3">
+<h3>Listar linhas não duplicados…</h3>
+<pre class="r"><code>Df2[!duplicated(Df2), ]</code></pre>
+<pre><code>##   a b
+## 1 A 1
+## 3 A 2
+## 4 B 4
+## 5 B 1
+## 7 C 2</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="criação-de-variáveis" class="section level2">
+<h2>Criação de variáveis</h2>
+<div id="nova-variável" class="section level3">
+<h3>Nova variável</h3>
+<pre class="r"><code>Df$var6 &lt;- 1                # crea var4 =1</code></pre>
+<pre class="r"><code>Df$var7 &lt;- Df$var6 + Df$stress          # crea var5 = var1  + var3</code></pre>
+<pre class="r"><code>Df$idade &lt;- c(21,32,13,54,15)       # creates age</code></pre>
+<pre class="r"><code>Df</code></pre>
+<pre><code>##   id cigarros sexo   cidade grupo stress var6 var7 idade
+## 1  1       15    0   Lisboa     A      4    1    5    21
+## 2  2       19    1   Lisboa     C      4    1    5    32
+## 3  3       14    1    Porto     C      2    1    3    13
+## 4  3       12    0   Lisboa     B      1    1    2    54
+## 5  5       15    0 Portimão     B     39    1   40    15</code></pre>
+<p><br></p>
+</div>
+<div id="variável-id" class="section level3">
+<h3>Variável ID</h3>
+<pre class="r"><code>Df$id3  &lt;-  1: nrow(Df) 
+
+Df$id4  &lt;-  1:length(Df$cigarros) </code></pre>
+<p>ID with letters (instead of números)</p>
+<pre class="r"><code>Df$idl &lt;- letters [1:nrow(Df)]</code></pre>
+<p><br></p>
+<pre class="r"><code>Df</code></pre>
+<pre><code>##   id cigarros sexo   cidade grupo stress var6 var7 idade id3 id4 idl
+## 1  1       15    0   Lisboa     A      4    1    5    21   1   1   a
+## 2  2       19    1   Lisboa     C      4    1    5    32   2   2   b
+## 3  3       14    1    Porto     C      2    1    3    13   3   3   c
+## 4  3       12    0   Lisboa     B      1    1    2    54   4   4   d
+## 5  5       15    0 Portimão     B     39    1   40    15   5   5   e</code></pre>
+<p><br></p>
+</div>
+<div id="crear-uma-sequência-dentro-de-um-grupo" class="section level3">
+<h3>Crear uma sequência dentro de um grupo</h3>
+<p><a href="https://stackoverflow.com/questions/23197594/r-create-id-within-a-group">(several ways)</a></p>
+<p>Com o pacote base, usar <code>ave</code>:</p>
+<pre class="r"><code>Df$id_spell_sex &lt;- with(Df, ave(rep(1, nrow(Df)), sexo, FUN = seq_along))
+
+Df[order(Df$sexo), c(&quot;id&quot;,&quot;sexo&quot;, &quot;id_spell_sex&quot;)]</code></pre>
+<pre><code>##   id sexo id_spell_sex
+## 1  1    0            1
+## 4  3    0            2
+## 5  5    0            3
+## 2  2    1            1
+## 3  3    1            2</code></pre>
+<p>Com o pacote “dplyr” package</p>
+<pre class="r"><code>library(dplyr)
+Df &lt;-Df %&gt;% group_by(cidade) %&gt;% mutate(id_spell_cidade = row_number(cidade))
+
+Df[order(Df$cidade), c(&quot;id&quot;,&quot;cidade&quot;, &quot;id_spell_cidade&quot;)]</code></pre>
+</div>
+</div>
+<div id="eliminar-colunas-e-linhas" class="section level2">
+<h2>Eliminar colunas e linhas</h2>
+<div id="eliminar-colunas-variáveis" class="section level3">
+<h3>Eliminar colunas (variáveis)</h3>
+<p>Varias opções</p>
+<pre class="r"><code>Df$stress       &lt;- NULL
+S[4]    &lt;- NULL     
+S [&quot;stress&quot;]    &lt;- NULL  </code></pre>
+<pre class="r"><code>S &lt;- S[,-4]     </code></pre>
+<p><br></p>
+</div>
+<div id="eliminar-linhas-observaçoes" class="section level3">
+<h3>Eliminar linhas (observaçoes)</h3>
+<pre class="r"><code>S&lt;-S[-39,]      # elimina row 39 </code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="mudar-nome-de-variáveis" class="section level2">
+<h2>Mudar nome de variáveis</h2>
+<div id="todas-variáveis" class="section level3">
+<h3>Todas variáveis</h3>
+<pre class="r"><code>names (S) &lt;- c(&quot;Q1&quot;, &quot;Q2&quot;, &quot;Q3&quot;)   # list in ORDER ALL the vars of S</code></pre>
+</div>
+<div id="por-posição" class="section level3">
+<h3>Por posição: :</h3>
+<pre class="r"><code>names(S)[3] &lt;- &quot;Country&quot;    </code></pre>
+</div>
+<div id="por-nome" class="section level3">
+<h3>Por nome:</h3>
+<pre class="r"><code>names(Df) [names(Df)==&quot;cigarros&quot;] &lt;- &quot;cig&quot;  </code></pre>
+</div>
+<div id="com-o-plyr-package" class="section level3">
+<h3>com o plyr package:</h3>
+<pre class="r"><code>library(plyr)
+S &lt;- rename(S, c(&quot;oldname&quot;=&quot;newname&quot;, &quot;oldname&quot;=&quot;newname&quot;))  </code></pre>
+</div>
+<div id="com-o-reshape-package" class="section level3">
+<h3>com o reshape package:</h3>
+<pre class="r"><code>library(reshape)    
+S &lt;- rename(S, c(var1=&quot;x1&quot;))    </code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="reordenar-variáveis" class="section level2">
+<h2>Reordenar variáveis</h2>
+<div id="por-posição-1" class="section level3">
+<h3>Por posição:</h3>
+<pre class="r"><code>data &lt;- data[,c(1:3,5,4)]</code></pre>
+</div>
+<div id="por-nome-1" class="section level3">
+<h3>Por nome:</h3>
+<pre class="r"><code>names &lt;- c(&quot;v1&quot;, &quot;v2&quot;, &quot;v3&quot;, &quot;v5&quot;, &quot;v4&quot;) 
+data &lt;- data[names]</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="ordenar-variáveis-sort" class="section level2">
+<h2>Ordenar variáveis (<code>sort()</code>)</h2>
+<pre class="r"><code>sort(Df$cigarros)</code></pre>
+<p><br></p>
+</div>
+<div id="ordenar-a-base-order" class="section level2">
+<h2>Ordenar a base (<code>order()</code>)</h2>
+<pre class="r"><code>Df [order(Df$cigarros),]             # ordenar Df por cigarros
+
+Df [order(Df$cigarros, Df$stress),] # ... por cigarros e stress
+
+Df [order(Df$cigarros, -Df$stress),] #  ... por cigarros (asc) e stress
+
+[order(Df$cigarros, -Df$stress),]   # por cigarros(asc.) e stress (desc.)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="rownames" class="section level2">
+<h2>Rownames</h2>
+<div id="visualizar-os-nomes-das-linhas-da-base" class="section level3">
+<h3>Visualizar os nomes das linhas da base</h3>
+<pre class="r"><code>rownames (Df)                 </code></pre>
+<p><br></p>
+</div>
+<div id="mudar-rownames" class="section level3">
+<h3>Mudar rownames</h3>
+<pre class="r"><code>rownames (Df)  &lt;- 1:5</code></pre>
+<p><br></p>
+</div>
+<div id="eliminar-rownames" class="section level3">
+<h3>Eliminar rownames</h3>
+<pre class="r"><code>row.names(Df) &lt;- NULL </code></pre>
+<p><br></p>
+</div>
+<div id="subset-datasets" class="section level3">
+<h3>subset datasets</h3>
+<div id="using-c" class="section level4">
+<h4>Using [c() ]</h4>
+<pre class="r"><code>Df[c(&quot;sexo&quot;, &quot;cidade&quot;)]     #subset including sexo, cidade
+Df[c( 3,4)]             #idem
+
+Df[c(-1, -3)]           #subset excluindo v1,v3
+Df[- c(1, 3)]           #idem</code></pre>
+</div>
+<div id="usando-based-on-variables-positions" class="section level4">
+<h4>Usando [ , ] based on variables’ positions</h4>
+<pre class="r"><code>S[1:5,    ]             # first 5 observations(S[   , 1:3]              # first 3 columns</code></pre>
+</div>
+<div id="using-which-based-on-variables-values" class="section level4">
+<h4>Using [(which() , ] based on variables’ values</h4>
+<pre class="r"><code>s &lt;- S[which(Df$m!=99)          ,      ]
+s &lt;- S[which(Df$m!=99 &amp; nivel&lt;3),      ]
+s &lt;- S[which(Df$m!=99 &amp; nivel&lt;3 ,c(2,3) ]</code></pre>
+</div>
+<div id="using-subset" class="section level4">
+<h4>Using subset ()</h4>
+<pre class="r"><code>s &lt;- subset (S, year &lt;= 1983,   select=c(year, min)) </code></pre>
+<p><br></p>
+</div>
+</div>
+</div>
+<div id="merge" class="section level2">
+<h2>MERGE</h2>
+<div id="merge-duas-bases-by-id" class="section level3">
+<h3>‘Merge’ duas bases ‘by ID’</h3>
+<pre class="r"><code>total &lt;- merge(dataframeA, dataframeB, by=&quot;id&quot;)</code></pre>
+<pre class="r"><code>total &lt;- merge(dataframeX, dataframeY, by=&quot;id&quot;, all.x=TRUE )</code></pre>
+<p>Extra rows will be added to the output, one for each row in x that has no matching row in y.<br />
+<br></p>
+<pre class="r"><code>total &lt;- merge(dataframeX, dataframeY, by=&quot;id&quot;, all.y=TRUE )</code></pre>
+<p>Extra rows will be added to the output, one for each row in y that has no matching row in x. <br></p>
+<pre class="r"><code>total &lt;- merge(dataframeA, dataframeB, by=&quot;id&quot;, all=TRUE )</code></pre>
+<p><br></p>
+</div>
+<div id="merge-mais-de-duas-bases-link" class="section level3">
+<h3>‘Merge’ mais de duas bases <a href="https://www.r-bloggers.com/merging-multiple-data-files-into-one-data-frame/">Link</a></h3>
+<p>What if I have 20 files with data that I want to match observation-to-observation? Assuming they all have a common column that allows merging, I would still have to read 20 files in (20 lines of code) and merge() works two-by-two… so I could merge the 20 data frames together with 19 merge statements like this:</p>
+<pre class="r"><code>mytempdata = merge(myDf, mydata2)(mytempdata = merge(mytempdata, mydata3)(.((mytempdata = merge(mytempdata, mydata20)</code></pre>
+<p>That’s tedious. You may be looking for a simpler way. If you are, I wrote a function to solve your woes called multmerge().* Here’s the code to define the function:</p>
+<pre class="r"><code>multmerge = function(mypath){
+filenames=list.files(path=mypath, full.names=TRUE)
+datalist = lapply(filenames, function(x){read.csv(file=x,header=T)})
+Reduce(function(x,y) {merge(x,y)}, datalist)</code></pre>
+<p><br></p>
+<p>ANOTHER solution is to use dplyr package and it’s inner_join as follows:</p>
+<pre class="r"><code>library(dplyr)
+df &lt;- inner_join(df1, df2)
+df &lt;- inner_join(df, df3)</code></pre>
+<p><br></p>
+</div>
+<div id="merge-rows" class="section level3">
+<h3>‘Merge’ rows</h3>
+<p>To join two data frames (datasets) vertically, use the rbind function.</p>
+<pre class="r"><code>total &lt;- rbind(data frameA, data frameB)</code></pre>
+<p>The two data frames must have the same variables, but they do not have to be in the same order.</p>
+<p>If data frameA has variables that data frameB does not, then either: a. Delete the extra variables in data frameA or b. Create the additional variables in data frameB and set them to NA (missing) before joining them with rbind( ).</p>
+</div>
+<div id="merge-colums" class="section level3">
+<h3>‘Merge’ colums</h3>
+<pre class="r"><code>cbind ???</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="reshape" class="section level2">
+<h2>RESHAPE</h2>
+<p><a href="http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/">(mais info aqui)</a></p>
+<p>Data is considered as<br />
+- <strong>wide</strong> format (one row per subject) when there is one observation row per subject with each measurement present as a different variable and<br />
+- <strong>long</strong> format (multiple rows per subject) when there is one observation row per measurement.<br />
+<br></p>
+<div id="de-wide-a-long-format" class="section level3">
+<h3>de Wide a Long format?</h3>
+<p><br></p>
+</div>
+<div id="de-long-a-wide" class="section level3">
+<h3>de Long a Wide</h3>
+<pre class="r"><code>library (reshape2)
+
+data_wide &lt;- dcast(Df,   port_field + port_ch ~ port_spell_matrix, value.var=&quot;port_field&quot;)
+View(data_wide2)</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="variables-sumar-por-columnas" class="section level2">
+<h2>Variables: sumar por columnas</h2>
+<p>Crear una variable summando varias</p>
+<pre class="r"><code>D$cabsize &lt;- mapply(sum, Df$inner, Df$minister)
+
+dataFrame$newColumn &lt;- mapply(someFunction, dataFrame$column1, dataFrame$column2, dataFrame$column3)</code></pre>
+<p><br></p>
+</div>
+<div id="variables-sumar-por-grupo-isto-a-dataframe-section" class="section level2">
+<h2>Variables: sumar por grupo [ISTO A DATAFRAME section]</h2>
+<pre class="r"><code>library (plyr)
+ddply(rr,                       # dataset
+      c(&#39;year&#39;, &#39;nivelf&#39;),      # &#39;column(s) name of a factor to group by&#39;
+      transform,                # OR summarize  
+      TOTinterA1 = sum (interA1))
+
+ddply(rr,                       
+      c(&#39;year&#39;, &#39;nivelf&#39;),      
+      transform,
+      TOTgestA1 = sum (gestA1),
+      TOTcoordA1 = sum (coordA1),
+      TOTinterA1 = sum (interA1),
+      TOTastecdA1 = sum (astecA1),
+      TOTaspolA1 = sum (aspolA1))
+
+newrr &lt;- companiesData %.%  group_by(company)               %.% mutate (highestMargin = max(margin), lowestMargin = min(margin)) 
+newrr &lt;- rr            %&gt;% group_by (year,nivelf)  %&gt;% mutate (TOTgestA1 = sum (gestA1),
+TOTcoordA1 = sum (coordA1),
+TOTinterA1 = sum (interA1),
+TOTastecdA1 = sum (astecA1),
+TOTaspolA1 = sum (aspolA1))
+newrr
+class(newrr)
+nr&lt;-as.data.frame(newrr)</code></pre>
+<p><br> <br> <br></p>
+</div>
+<div id="dplyr-package" class="section level2">
+<h2>dplyr package</h2>
+<p>PACKAGE FOR Managing Data Frames:<br />
+The dplyr package does not provide any “new” functionality to R per se but it greatly simplifies existing functionality in R.<br />
+- <code>select</code>: return a subset of the columns of a data frame, using a flexible notation<br />
+- <code>filter</code>: extract a subset of rows from a data frame based on logical conditions<br />
+- <code>arrange</code>: reorder rows of a data frame<br />
+- <code>rename</code>: rename variables in a data frame<br />
+- <code>mutate</code>: add new variables/columns or transform existing variables<br />
+- <code>summarise / summarize</code>: generate summary statistics of different variables in the (data frame, possibly within strata<br />
+- <code>%&gt;%</code> : connect multiple verb actions together into a pipeline<br />
+<br></p>
+<p><em>Structure of the function</em>:<br />
+a. The first argument is a data frame.<br />
+a. The subsequent arguments describe what to do with the data frame specified in the first argument, and you can refer to columns in the data frame directly without using the $ operator (just use the column names).<br />
+a. The return result of a function is a new data frame</p>
+<ul>
+<li>Select()</li>
+</ul>
+<pre class="r"><code>names (A)
+A1 &lt;- select (A, var1:var3)     # select specific variables
+A1 &lt;- select (A, - (var1:var3) ) # omit specific variables</code></pre>
+<ul>
+<li>filter()<br />
+This function is used to extract subsets of rows from a data frame.</li>
+</ul>
+<pre class="r"><code>A1 &lt;- filter(A, var1 &gt; 30 &amp; var2 &gt; 80)</code></pre>
+<ul>
+<li>arrange()<br />
+This function is used to reorder rows of a data frame according to one of the variables/columns.</li>
+</ul>
+<pre class="r"><code>A1 &lt;- arrange(A, date)</code></pre>
+<ul>
+<li>rename()<br />
+Renaming a variable in a data frame in R is surprisingly hard to do! This function is designed to make this process easier.</li>
+</ul>
+<pre class="r"><code>A1 &lt;- rename(A, nameofnewvar1 = nameOldV2,  nameofnewvar1 = nameOldV2)</code></pre>
+<ul>
+<li>mutate()<br />
+This function exists to compute transformations of variables in a data frame.</li>
+</ul>
+<pre class="r"><code>A1 &lt;- mutate (A, nameNewVar = var1 - mean(var1, na.rm = TRUE)) </code></pre>
+<ul>
+<li><p>group_by()<br />
+This function is used to generate summary statistics from the data frame within strata defined by a variable.</p></li>
+<li><p>%&gt;%<br />
+This operater is very handy for stringing together multiple dplyr functions in a sequence of operations. Notice above that every time we wanted to apply more than one function, the sequence gets buried in a sequence of nested function calls that is difficult to read, i.e.</p></li>
+</ul>
+<pre class="r"><code>third(second(first(x)))</code></pre>
+<p>This nesting is not a natural way to think about a sequence of operations. The %&gt;% operator allows you to string operations in a left-to-right fashion, i.e.</p>
+<pre class="r"><code>first(x) %&gt;% second %&gt;% third(</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

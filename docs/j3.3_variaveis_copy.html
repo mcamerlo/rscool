@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Variables</title>
+
+<!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content=""/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+<!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+<style type="text/css">
+body {
+  padding-top: 60px;
+}
+</style>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/jquerylib/lib/3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/js/bootstrap.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/shim/html5shiv.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/bootstrap/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/jqueryui/jquery-ui.min.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/tocify/jquery.tocify.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/tocify/jquery.tocify.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/navigation-1.1/tabsets.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/highlightjs/default.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/highlightjs/highlight.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/fontawesome/css/all.css" rel="stylesheet" />
+<link href="/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rmarkdown/rmd/h/fontawesome/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="index.html" class="title">RSCool online</a>
+<a href="index.html">
+<i class="fa fa-home" aria-hidden="true"></i>
+</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+ARRANCANDO
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.0.1_pacotes_copy.html">Pacotes esenciais</a>
+<a href="j3.0.2_boaspraticas_copy.html">Boas práticas</a>
+<a href="j3.0.3_glossario_copy.html">Glossario básico</a>
+</div>
+</div>
+<a>
+<i class="fa fa-gear" aria-hidden="true"></i>
+</a>
+<a href="j3.1_linguagem_copy.html">FALANDO R</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+O 'WORKSPACE'
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.2_workspace_copy.html">Gestão do Workspace</a>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+GESTÃOSdosDADOS
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="j3.3_variaveis_copy.html">Variables</a>
+<a href="j3.4_dataframes_copy.html">Dataframes</a>
+<hr/>
+<a href="3.5_tables_copy.html">Tables</a>
+<a href="j3.6_graficos_copy.html">Gráficos</a>
+</div>
+</div>
+<a>
+<i class="fa fa-gear" aria-hidden="true"></i>
+</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Univariada
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<span class="nav-dropdown-header">Qualitativa</span>
+<span class="nav-dropdown-header">Protocolo Qualitativa</span>
+<span class="nav-dropdown-header">Exemplo.0 Qualitativa</span>
+<hr/>
+<span class="nav-dropdown-header">Quantitativa</span>
+<span class="nav-dropdown-header">Protocolo Quantitativa</span>
+<span class="nav-dropdown-header">Exemplo.0 Quantitativa</span>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Bivariada
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<span class="nav-dropdown-header">Quali/Quali</span>
+<span class="nav-dropdown-header">Protocolo Quali/Quali</span>
+<span class="nav-dropdown-header">Exemplo.0 Quali/Quali</span>
+<hr/>
+<span class="nav-dropdown-header">Quali/Quanti</span>
+<span class="nav-dropdown-header">Protocolo Quali/Quanti</span>
+<span class="nav-dropdown-header">Exemplo.0 Quali/Quanti</span>
+<hr/>
+<span class="nav-dropdown-header">Quanti/Quanti</span>
+<span class="nav-dropdown-header">Protocolo Quanti/Quanti</span>
+<span class="nav-dropdown-header">Exemplo.0 Quanti/Quanti</span>
+</div>
+</div>
+</div>
+<div class="nav-right">
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    ARRANCANDO
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.0.1_pacotes_copy.html">Pacotes esenciais</a>
+    </li>
+    <li>
+      <a href="j3.0.2_boaspraticas_copy.html">Boas práticas</a>
+    </li>
+    <li>
+      <a href="j3.0.3_glossario_copy.html">Glossario básico</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a>
+    <span class="fa fa-gear"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="j3.1_linguagem_copy.html">FALANDO R</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    O 'WORKSPACE'
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.2_workspace_copy.html">Gestão do Workspace</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GESTÃOSdosDADOS
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="j3.3_variaveis_copy.html">Variables</a>
+    </li>
+    <li>
+      <a href="j3.4_dataframes_copy.html">Dataframes</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="3.5_tables_copy.html">Tables</a>
+    </li>
+    <li>
+      <a href="j3.6_graficos_copy.html">Gráficos</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a>
+    <span class="fa fa-gear"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Univariada
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Qualitativa</li>
+    <li class="dropdown-header">Protocolo Qualitativa</li>
+    <li class="dropdown-header">Exemplo.0 Qualitativa</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quantitativa</li>
+    <li class="dropdown-header">Protocolo Quantitativa</li>
+    <li class="dropdown-header">Exemplo.0 Quantitativa</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Bivariada
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Quali/Quali</li>
+    <li class="dropdown-header">Protocolo Quali/Quali</li>
+    <li class="dropdown-header">Exemplo.0 Quali/Quali</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quali/Quanti</li>
+    <li class="dropdown-header">Protocolo Quali/Quanti</li>
+    <li class="dropdown-header">Exemplo.0 Quali/Quanti</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Quanti/Quanti</li>
+    <li class="dropdown-header">Protocolo Quanti/Quanti</li>
+    <li class="dropdown-header">Exemplo.0 Quanti/Quanti</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Variables</h1>
+
+</div>
+
+
+<div id="app.3-variaveis" class="section level1">
+<h1>App.3: VARIAVEIS</h1>
+<div id="exploração-de-uma-variável" class="section level2">
+<h2>Exploração de uma Variável</h2>
+<pre class="r"><code>class(x)
+
+length(x)</code></pre>
+<pre class="r"><code>table(x)
+table (is.na(x) )</code></pre>
+<pre class="r"><code>sort  (x)
+sum(x)
+mean (x)
+median(x)           </code></pre>
+<p><br></p>
+<hr />
+</div>
+<div id="objects" class="section level2">
+<h2>Objects</h2>
+<ul>
+<li>Pedir a classe de um objeto</li>
+</ul>
+<pre class="r"><code>class (x)</code></pre>
+<ul>
+<li>Testar classe</li>
+</ul>
+<pre class="r"><code>    is.numeric(x)
+    is.character(x)
+    is.factor (x)
+    is.vector(x)
+    is.matrix(x)
+    is.data.frame(x)</code></pre>
+<p><br></p>
+<ul>
+<li>Coercionar a classe de um objeto</li>
+</ul>
+<pre class="r"><code>  as.numeric()
+    as.character()
+    as.factor ()
+    as.vector()
+    as.matrix()
+    as.data.frame() </code></pre>
+<ul>
+<li>Convertir uma tabela em dataframe</li>
+</ul>
+<pre class="r"><code>as.data.frame.matrix(mytable)</code></pre>
+<p>OBS: Muita atenção quando se ‘coercionam’ factores com categorias numéricas. O resultado pode não ser o esperado…. <a href="http://www.dummies.com/how-to/content/how-to-convert-a-factor-in-r.navId-812016.html">(aquí mais info)</a>.</p>
+<p><br></p>
+<ul>
+<li>Observar atributos de um objeto (não mostrados no output por defeito)<br />
+(R não sempre apresenta no output toda a info do objeto)</li>
+</ul>
+<pre class="r"><code>attributes(modelo1)
+
+str(modelo1)</code></pre>
+<ul>
+<li>Aceder a atributos específicos</li>
+</ul>
+<pre class="r"><code># exemplo:
+modelo1$Coef</code></pre>
+<p><br></p>
+<hr />
+</div>
+<div id="variáveis-factor" class="section level2">
+<h2>Variáveis ‘factor’</h2>
+<ul>
+<li>Factorizar uma variável não factor</li>
+</ul>
+<pre class="r"><code>v &lt;- c(0, 1, 1, 0, 5,5, 0)
+
+f &lt;- factor (v)
+class(f)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<ul>
+<li>Visualizar ‘levels’ de uma factor</li>
+</ul>
+<pre class="r"><code>levels(f) </code></pre>
+<pre><code>## [1] &quot;0&quot; &quot;1&quot; &quot;5&quot;</code></pre>
+<ul>
+<li>Atribuir ‘labels’ de uma factor</li>
+</ul>
+<pre class="r"><code>f &lt;- factor(f,
+            levels = c(0,1, 5),
+             labels = c(&quot;azul&quot;, &quot;verde&quot;, &quot;cinzento&quot;))
+
+f</code></pre>
+<pre><code>## [1] azul     verde    verde    azul     cinzento cinzento azul    
+## Levels: azul verde cinzento</code></pre>
+<ul>
+<li>Recodificar em 2 categorias</li>
+</ul>
+<pre class="r"><code>f.2 &lt;- ifelse(f==&quot;azul&quot;,  &quot;A&quot;, &quot;nonA&quot;) 
+f.2</code></pre>
+<pre><code>## [1] &quot;A&quot;    &quot;nonA&quot; &quot;nonA&quot; &quot;A&quot;    &quot;nonA&quot; &quot;nonA&quot; &quot;A&quot;</code></pre>
+<p><br></p>
+<ul>
+<li>Recodificar em 3 categorias</li>
+</ul>
+<pre class="r"><code>age &lt;- c(9, 9, 11, 14, 16, 30, 50)
+
+age.3 &lt;- NA
+age.3  [age &lt; 10]             &lt;- &quot;child&quot;
+age.3  [age &gt;= 10 &amp; age &lt; 20] &lt;- &quot;teenager&quot;
+age.3  [age &gt;= 20]            &lt;- &quot;adult&quot;
+
+age.3</code></pre>
+<pre><code>## [1] &quot;child&quot;    &quot;child&quot;    &quot;teenager&quot; &quot;teenager&quot; &quot;teenager&quot; &quot;adult&quot;    &quot;adult&quot;</code></pre>
+<p><br></p>
+<ul>
+<li>Mudar nome de um level <a href="http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/">(mais aqui)</a></li>
+</ul>
+<pre class="r"><code>library(plyr)
+f &lt;- revalue(f, c(&quot;azul&quot;=&quot;AZUL&quot;))
+f</code></pre>
+<pre><code>## [1] AZUL     verde    verde    AZUL     cinzento cinzento AZUL    
+## Levels: AZUL verde cinzento</code></pre>
+<p><br></p>
+<ul>
+<li>Especificar a categoría de referencia</li>
+</ul>
+<pre class="r"><code>f &lt;- relevel (f, &quot;verde&quot;)   # ver ordem de &quot;Levels&quot;
+f</code></pre>
+<pre><code>## [1] AZUL     verde    verde    AZUL     cinzento cinzento AZUL    
+## Levels: verde AZUL cinzento</code></pre>
+<p><br></p>
+<ul>
+<li>Agregar uma categoria</li>
+</ul>
+<pre class="r"><code>f &lt;- factor(f, levels = c(levels(f), &quot;BRANCO&quot;))
+f</code></pre>
+<p><br></p>
+<ul>
+<li>Eliminar uma categoria</li>
+</ul>
+<pre class="r"><code>f &lt;- f[f !=&quot;cinzento&quot;] # eliminar observações da categoria   
+f &lt;- factor (f)    # re-factorizar (se eliminam todas as categorias sem obs)
+f</code></pre>
+<pre><code>## [1] AZUL  verde verde AZUL  AZUL 
+## Levels: verde AZUL</code></pre>
+<p><br></p>
+<ul>
+<li>Invertir a ordem das ‘levels’</li>
+</ul>
+<pre class="r"><code>f_rev  &lt;- factor(f, levels = rev(levels(f)))
+f_rev</code></pre>
+<p><br></p>
+<ul>
+<li>Reordenar ‘levels’ <a href="http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_factor/">(mais aqui)</a></li>
+</ul>
+<pre class="r"><code>f &lt;- factor(f, levels = c(&quot;verde&quot;, &quot;AZUL&quot;))</code></pre>
+<p><br></p>
+<ul>
+<li>Reordenar var1 by var2 <a href="https://sarahleejane.github.io/learning/r/2014/09/17/ordering-factors-by-another-column-with-R.html">(exemplo)</a></li>
+</ul>
+<pre class="r"><code>var1 &lt;- reorder(var1, var2)
+
+var1 &lt;- reorder(var1, -var2)  # descending</code></pre>
+<p><br></p>
+<ul>
+<li>Dica para ordenar levels de uma factor baseado na ordem das linhas numa base <a href="https://github.com/STAT545-UBC/Discussion/issues/52">aqui</a><br />
+In short, if you have a data.frame with the rows in order and you want the levels of one of the columns to be in that same order,<br />
+you can use ´Df &lt;- mutate(Df, col = factor(col, col))`.</li>
+</ul>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:plyr&#39;:
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>Df &lt;- data.frame(
+  num = 5:1,
+  word = c(&quot;five&quot;, &quot;four&quot;, &quot;three&quot;, &quot;two&quot;, &quot;one&quot;))
+levels(Df$word) # levels are alphabetical by default</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>Df$word # right now the order is 5,4,3,2,1</code></pre>
+<pre><code>## [1] &quot;five&quot;  &quot;four&quot;  &quot;three&quot; &quot;two&quot;   &quot;one&quot;</code></pre>
+<pre class="r"><code>Df &lt;- Df %&gt;%
+  arrange(num) %&gt;%   # rearrange the Df in the order we want (1,2,3,4,5)
+  mutate(word = factor(word, word)) # this line reorders the factor in the same order
+levels(Df$word)  # now the levels are 1,2,3,4,5</code></pre>
+<pre><code>## [1] &quot;one&quot;   &quot;two&quot;   &quot;three&quot; &quot;four&quot;  &quot;five&quot;</code></pre>
+<p><a href="http://www.ats.ucla.edu/stat/r/modules/factor_variables.htm">Mais sobre ordenar uma factor aqui</a> <br> <br></p>
+<hr />
+</div>
+<div id="nas-valores-em-falta" class="section level2">
+<h2>NAs (valores em falta)</h2>
+<ul>
+<li>Detectar NAs numa variável</li>
+</ul>
+<pre class="r"><code>table (is.na(x))</code></pre>
+<ul>
+<li>Tabela que não exclua NAs</li>
+</ul>
+<pre class="r"><code>table (x, exclude = FALSE)</code></pre>
+<p><br></p>
+<ul>
+<li>Calcular média duma variável com NAs</li>
+</ul>
+<pre class="r"><code>mean(x, na.rm = TRUE)</code></pre>
+<p><br></p>
+<ul>
+<li>Eliminar observações com NA numa variável</li>
+</ul>
+<pre class="r"><code>Df &lt;-subset( Df   ,   !is.na (sexo))  </code></pre>
+<p><br></p>
+<ul>
+<li>Eliminar obs com NA em todas as variables da base Df</li>
+</ul>
+<pre class="r"><code>Df &lt;- na.omit (Df)              </code></pre>
+<p><br></p>
+<ul>
+<li>Recodificar NAs em 0</li>
+</ul>
+<pre class="r"><code>y[is.na(y)] &lt;- 0         # transforma “NA” de “y” en “0”</code></pre>
+<p><br></p>
+<ul>
+<li>Recodificar como NA</li>
+</ul>
+<pre class="r"><code>(D$x[D$x==88] &lt;- NA # recodificar x==88  em NA</code></pre>
+<p><br></p>
+<ul>
+<li>Listar linhas com NAs</li>
+</ul>
+<pre class="r"><code>Df[!complete.cases(Df),]</code></pre>
+<p><br></p>
+<ul>
+<li>Criar nova base sem NAs</li>
+</ul>
+<pre class="r"><code>DF_new &lt;- na.omit(DF)</code></pre>
+<p><br></p>
+<p><a href="http://stackoverflow.com/questions/20105015/summing-lots-of-vectors-row-wise-or-elementwise-but-ignoring-na-values">More on Missing (Summing lots of Vectors; row-wise or elementwise, but ignoring NA values)</a></p>
+<p><br> <br></p>
+</div>
+<div id="subsetting-vars" class="section level2">
+<h2>Subsetting Vars</h2>
+<pre class="r"><code>x[1:10]             # ten first
+x[is.na(x)]         # missings of x
+
+x[!is.na(x)]        # not missings of x
+ 
+y &lt;- x[!is.na(x)]   # not missings of x
+
+x[!is.na(x) &amp; x&gt;5]  # Combining our knowledge of logical operators with our new knowledge of subsetting
+
+x[c(3,5,7)]
+
+x[0]
+
+x[3000]
+
+x[c(-2,-10)]
+
+x[-c(2,10)]</code></pre>
+<p><br></p>
+</div>
+<div id="date-vectors" class="section level2">
+<h2>Date Vectors</h2>
+<p><a href="http://www.ats.ucla.edu/stat/r/faq/string_dates.htm">DATE conversor: How can I format a string containing a date into R “Date” object?</a></p>
+<ul>
+<li>importar de excel a STATA:</li>
+</ul>
+<pre class="r"><code># magic number -20454  (o -21916, segun Cecilia
+# transformar en n??mero, restar 20454, y asignar formato %td
+
+# generate statadate =date-20454
+# generate statadate =date-21916</code></pre>
+<ul>
+<li>Transformar String, com formato: “10/08/84”</li>
+</ul>
+<pre class="r"><code>x &lt;- c(&quot;10/08/84&quot;, &quot;10/08/84&quot;, &quot;10/08/84&quot;)</code></pre>
+<pre class="r"><code>dates &lt;- as.Date(x, format= &quot;%d / %m /%y&quot;)  # en &#39;format&#39; indicar ordem da variável string
+dates</code></pre>
+<pre><code>## [1] &quot;1984-08-10&quot; &quot;1984-08-10&quot; &quot;1984-08-10&quot;</code></pre>
+<pre class="r"><code>class(dates)</code></pre>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<pre class="r"><code>dates2a &lt;- format(dates, format=&quot;%d  /%B   / %Y&quot;)
+dates2a</code></pre>
+<pre><code>## [1] &quot;10  /August   / 1984&quot; &quot;10  /August   / 1984&quot; &quot;10  /August   / 1984&quot;</code></pre>
+<pre class="r"><code>dates2b &lt;- format(dates, format=&quot;%d  /%B   / %y&quot;)
+dates2b</code></pre>
+<pre><code>## [1] &quot;10  /August   / 84&quot; &quot;10  /August   / 84&quot; &quot;10  /August   / 84&quot;</code></pre>
+<pre class="r"><code>dates2c &lt;- format(dates, format=&quot;%d  /%b   / %Y&quot;)
+dates2c</code></pre>
+<pre><code>## [1] &quot;10  /Aug   / 1984&quot; &quot;10  /Aug   / 1984&quot; &quot;10  /Aug   / 1984&quot;</code></pre>
+<ul>
+<li>Transformar String, com formato: “10-Aug-79”</li>
+</ul>
+<pre class="r"><code>y &lt;- c(&quot;10-Aug-79&quot;, &quot;10-Aug-79&quot;, &quot;10-Aug-79&quot;)
+y</code></pre>
+<pre><code>## [1] &quot;10-Aug-79&quot; &quot;10-Aug-79&quot; &quot;10-Aug-79&quot;</code></pre>
+<pre class="r"><code>d3 &lt;- as.Date (y, format=&quot;%d - %B - %y&quot;)
+d3</code></pre>
+<pre><code>## [1] &quot;1979-08-10&quot; &quot;1979-08-10&quot; &quot;1979-08-10&quot;</code></pre>
+<pre class="r"><code>d3c &lt;- format(d3, format=&quot;%d  /%B   / %Y&quot;)
+d3c</code></pre>
+<pre><code>## [1] &quot;10  /August   / 1979&quot; &quot;10  /August   / 1979&quot; &quot;10  /August   / 1979&quot;</code></pre>
+</div>
+<div id="string-vectors" class="section level2">
+<h2>STRING VECTORS</h2>
+<p>[<a href="https://stringr.tidyverse.org/reference/str_order.html" class="uri">https://stringr.tidyverse.org/reference/str_order.html</a>]</p>
+<pre class="r"><code>x &lt;- c(&quot;xx&quot;, &quot;zz&quot;, &quot;aa&quot;)
+
+library( tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.4     ✓ stringr 1.4.0
+## ✓ tidyr   1.1.2     ✓ forcats 0.5.0
+## ✓ readr   1.4.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::arrange()   masks plyr::arrange()
+## x purrr::compact()   masks plyr::compact()
+## x dplyr::count()     masks plyr::count()
+## x dplyr::failwith()  masks plyr::failwith()
+## x dplyr::filter()    masks stats::filter()
+## x dplyr::id()        masks plyr::id()
+## x dplyr::lag()       masks stats::lag()
+## x dplyr::mutate()    masks plyr::mutate()
+## x dplyr::rename()    masks plyr::rename()
+## x dplyr::summarise() masks plyr::summarise()
+## x dplyr::summarize() masks plyr::summarize()</code></pre>
+<pre class="r"><code>str_sort(x)</code></pre>
+<pre><code>## [1] &quot;aa&quot; &quot;xx&quot; &quot;zz&quot;</code></pre>
+</div>
+</div>
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
