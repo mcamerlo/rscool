@@ -11,7 +11,7 @@
 
 
 
-<title>Workspace</title>
+<title>Descritiva</title>
 
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -369,320 +369,191 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Workspace</h1>
+<h1 class="title toc-ignore">Descritiva</h1>
 
 </div>
 
 
-<hr />
-<div id="passos-e-elmentos-básicos-de-uma-sessão-r" class="section level2">
-<h2>Passos e elmentos básicos de uma sessão R</h2>
-<p><img src="y_imagens/1.Elementos_sessao.png" /></p>
-<p><br> <br></p>
-<hr />
+<div id="uma-variável-categórica" class="section level1">
+<h1>Uma Variável Categórica</h1>
+<p>Variáveis (de <code>tutorialDataframe</code>)</p>
+<pre class="r"><code>stress &lt;-   c(0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0)
+stress &lt;- as.factor (stress)
+cigarros  &lt;- c(15,19,14,12,15,18,19,14,0,16,15,1,1,11,19,11)</code></pre>
+<div id="representação-numérica" class="section level2">
+<h2>Representação numérica</h2>
+<div id="tabelas-de-contingencia" class="section level3">
+<h3>Tabelas de contingencia</h3>
+<p>Dados desagregados (<em>raw data</em>)</p>
+<pre class="r"><code>stress</code></pre>
+<pre><code>##  [1] 0 1 1 0 0 1 1 1 0 1 1 0 0 0 0 0
+## Levels: 0 1</code></pre>
+<p><br></p>
 </div>
-<div id="o-ficheiro-.rproj" class="section level2">
-<h2>O ficheiro <code>.Rproj</code></h2>
-<p>Preparação do ambiente de trabalho com a criação de um ficheiro <code>.Rproj</code></p>
-<blockquote>
-<ol style="list-style-type: lower-alpha">
-<li>Antes de iniciar R.Studio: criar a pasta do projeto (e.g “Projeto_0”)</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2" style="list-style-type: lower-alpha">
-<li>Iniciar sessão R.Studio (clique no ícono) e digitar:<br />
-File (na barra de ferramentas principal) -&gt; New Project<br />
-—-&gt; Existing Directory<br />
-——–&gt; <em>[Procurar e selecionar a pasta (e.g.“Projeto_0”)]</em><br />
-—————-&gt; Create Project</li>
-</ol>
-</blockquote>
-<p><br> <br></p>
-<hr />
 </div>
-<div id="iniciar-sessão" class="section level2">
-<h2>Iniciar sessão</h2>
-<blockquote>
-<p>Clicar no ficheiro <code>.Rproj</code> (e.g. <em>Projeto_0.Proj</em>)</p>
-</blockquote>
+<div id="tabela-table" class="section level2">
+<h2>Tabela (<code>table</code>)</h2>
+<pre class="r"><code>t.stress &lt;- table (stress)</code></pre>
 <p><br></p>
 <ul>
-<li>Obter informação sobre a sessaõ R</li>
+<li><strong>Frequências</strong></li>
 </ul>
-<pre class="r"><code>sessionInfo()       </code></pre>
-<ul>
-<li>Opção numero de digitos para a sessão</li>
-</ul>
-<pre class="r"><code>options(digits=4)</code></pre>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="working-directory-wd" class="section level2">
-<h2>Working directory (wd)</h2>
-<ul>
-<li>Localizar o <code>wd</code></li>
-</ul>
-<pre class="r"><code>getwd()</code></pre>
-<ul>
-<li>Mudar localização <code>wd</code></li>
-</ul>
-<pre class="r"><code>setwd (&quot;/Users/Q/My_R/R_Project1&quot;)     </code></pre>
-<p>R utiliza <code>/</code> (forward slashes) para designar subdirectorios (diferente ao uso no Windows, ugual a Mac e Unix)</p>
-<ul>
-<li>Listar os ficheiros do <code>wd</code></li>
-</ul>
-<pre class="r"><code>list.files()</code></pre>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="a-memoria-ram" class="section level2">
-<h2>A memoria ‘ram’</h2>
-<ul>
-<li>Listar objectos ativos nos workspace</li>
-</ul>
-<pre class="r"><code>ls ( )          # listar os objetos da sessão
-ls(pat = &quot;c&quot;)   # listar objetos que contêm ‘c’ nos seus nomes
-ls(pat= &quot;^c&quot;)   #  listar objects que comecem com  ‘c’
-ls(pos=2)       # Check the contents of the file that has been attached </code></pre>
-<ul>
-<li>Remover objectos ativar</li>
-</ul>
-<pre class="r"><code>rm(&quot;var1&quot; )         # remover objeto &quot;var1&quot;
-
-rm(list =ls() ) # remover todos os objetos da sessão
-
-rm(list=setdiff(ls(), &quot;B&quot;))   # remover todo menos &quot;B&quot;
-
-rm(list=setdiff(ls(), c(&quot;W&quot;, &quot;X&quot;)))   # remover todo menos &quot;W&quot; e &quot;X&quot;</code></pre>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="pacotes" class="section level2">
-<h2>Pacotes</h2>
-<ul>
-<li>Instalar pacotes externos</li>
-</ul>
-<pre class="r"><code>install.packages (&quot;PackageName&quot;)</code></pre>
-<ul>
-<li>Activar pacotes já instalados</li>
-</ul>
-<pre class="r"><code>library (PackageName)       
-                # Or: clicking packages on Window4/ Tab Packages
-                # Or via menu system: Packages&gt;Load Packages    </code></pre>
-<ul>
-<li>Carregar bases internas</li>
-</ul>
-<pre class="r"><code>data(aids)    # carregar base ‘aids’ (pacote ‘(KMsurv)’</code></pre>
-<ul>
-<li>Fechar um pacote</li>
-</ul>
-<pre class="r"><code>detach (&quot;package:name&quot;) #detach data</code></pre>
-<ul>
-<li>Mais sobre pacotes</li>
-</ul>
-<pre class="r"><code>search ()               # mostra pacotes abertos
-
-library(help=KMsurv)        # mostra info sobre pacote KMsurv
-
-.libPaths()                 # indica a localização da &#39;library&#39;, the ‘library’ subdirectory of R_HOME.
-
-library ()          # cria script com todos os pacotes instalados e na library (ou olhar pestana FILES)</code></pre>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="ajudas" class="section level2">
-<h2>Ajudas</h2>
-<pre class="r"><code>?getwd      # information on the “getwd” function
-??getwd         # information on the “getwd” function
-apropos (&quot;norm&quot;)    # to find all functions in R that contains the string norm type)</code></pre>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="scripts" class="section level2">
-<h2>Scripts</h2>
-<ul>
-<li><strong>Criar scrip</strong></li>
-</ul>
-<p>Opção a:</p>
-<blockquote>
-<p><code>File</code> -&gt; <code>New File</code> -&gt; <code>R Script</code></p>
-</blockquote>
-<p>Opção b:</p>
-<p>Na barra de ferramentas da janela SOURCE:<br />
-&gt; <code>+</code> -&gt; <code>R Script</code></p>
-<p>Opção c:</p>
-<blockquote>
-<p><code>Ctrl + Schift + N</code> (Mac) PC? ?? PC?</p>
-</blockquote>
+<pre class="r"><code>t.stress     </code></pre>
+<pre><code>## stress
+## 0 1 
+## 9 7</code></pre>
 <p><br></p>
 <ul>
-<li><strong>Salvar Scripts</strong></li>
+<li><strong>Proporções</strong></li>
 </ul>
-<p>Opção a:</p>
-<blockquote>
-<p><code>File</code> -&gt; <code>New File</code> -&gt; <code>R Script</code> -&gt; <code>Save</code>/<code>Save as</code>/</p>
-</blockquote>
-<p>Opção b:</p>
-<blockquote>
-<p>usar o ícone da janela do script</p>
-</blockquote>
+<pre class="r"><code>prop.table(t.stress )</code></pre>
+<pre><code>## stress
+##      0      1 
+## 0.5625 0.4375</code></pre>
 <p><br></p>
 <ul>
-<li><strong>Abrir script existente</strong></li>
+<li><strong>Percentagens</strong></li>
 </ul>
-<p>Opção a:</p>
-<blockquote>
-<p><code>File</code> -&gt; <code>Open File</code> -&gt; (search script and open)</p>
-</blockquote>
-<p>Opção b:</p>
-<blockquote>
-<p>duplo-click no script, na janela FILES</p>
-</blockquote>
+<pre class="r"><code>prop.table(t.stress )*100</code></pre>
+<pre><code>## stress
+##     0     1 
+## 56.25 43.75</code></pre>
 <p><br></p>
 <ul>
-<li><strong>Executar comandos no script</strong></li>
+<li><strong>Percentagens com margens</strong></li>
 </ul>
-<blockquote>
-<p>sublinhar comando -&gt;<code>Cmd+ENTER</code> (Mac)</p>
-</blockquote>
-<blockquote>
-<p>sublinhar comando -&gt;<code>Ctrl+R</code> (Windows)</p>
-</blockquote>
+<pre class="r"><code>addmargins(prop.table(t.stress )*100)</code></pre>
+<pre><code>## stress
+##      0      1    Sum 
+##  56.25  43.75 100.00</code></pre>
 <p><br> <br></p>
 <hr />
 </div>
-<div id="carregar-objetos" class="section level2">
-<h2>Carregar objetos</h2>
-<ul>
-<li>Carregar objetos do ‘working directory’</li>
-</ul>
-<pre class="r"><code>load (&quot;objecto_y&quot;)          
-load (&quot;objectox_yx&quot;)        
-load (“Minhabase&quot;)
-load (&quot;WorkspaceProj1&quot;)    </code></pre>
-<ul>
-<li>Carregar objetos de outros diretorios</li>
-</ul>
-<pre class="r"><code>load (&quot;~/0R/AA&quot;)  </code></pre>
-<ul>
-<li>Recolher a posição de um ficheiro</li>
-</ul>
-<pre class="r"><code>file.choose()   </code></pre>
-<p><br> <br></p>
-<hr />
+<div id="representação-gráfica" class="section level2">
+<h2>Representação gráfica</h2>
+<div id="pie" class="section level3">
+<h3>Pie</h3>
+<pre class="r"><code>pie (t.stress )</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /> <br></p>
 </div>
-<div id="salvar" class="section level2">
-<h2>Salvar</h2>
+<div id="barplot-." class="section level3">
+<h3>Barplot ….</h3>
 <ul>
-<li>Salvar objetos no ‘working directory’</li>
+<li><strong>com frequências- </strong></li>
 </ul>
-<pre class="r"><code>save (y, file=&quot;object_y&quot;)               # Guardar y como &quot;object_y&quot;     
-save (y, x, file=&quot;object_yx&quot;)           # Guardar y and x 
-save (minhabase, file=&quot;Minhabase.RData&quot;)        # Guardar dataframe
-save.image(file=&quot;WorkspaceProj1&quot;)       # Guardar workspace</code></pre>
+<pre class="r"><code>barplot (t.stress )</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
 <ul>
-<li>Salvar objetos em outros directorios</li>
+<li><strong>com proporções</strong></li>
 </ul>
-<pre class="r"><code>save (AA, file= &quot;~/0R/AA&quot;)  
-        # AA= obeto R
-        # &quot;~/0R/AA&quot;= posição e nome do objeto salvado</code></pre>
+<pre class="r"><code>barplot (prop.table(table(stress)))</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+<div id="tabela-para-quantitativa" class="section level2">
+<h2>Tabela para quantitativa</h2>
+<ul>
+<li><strong>Proporciones</strong></li>
+</ul>
+<pre class="r"><code>t1 &lt;-table (cigarros)
+
+t2 &lt;- cbind(Freq=t1, 
+                Cumul=cumsum(t1), 
+                Relative=prop.table(t1), 
+                Cum.Rel.=cumsum(prop.table(t1) ) )
+t2</code></pre>
+<pre><code>##    Freq Cumul Relative Cum.Rel.
+## 0     1     1   0.0625   0.0625
+## 1     2     3   0.1250   0.1875
+## 11    2     5   0.1250   0.3125
+## 12    1     6   0.0625   0.3750
+## 14    2     8   0.1250   0.5000
+## 15    3    11   0.1875   0.6875
+## 16    1    12   0.0625   0.7500
+## 18    1    13   0.0625   0.8125
+## 19    3    16   0.1875   1.0000</code></pre>
 <p><br></p>
 <ul>
-<li>Salvar Gráficos para pdf</li>
+<li><strong>Porcentajens</strong></li>
 </ul>
-<pre class="r"><code>pdf(&quot;mygraph.pdf&quot;)      # create the file
-plot (x,)       # execute the graphic
-dev.off()       # finish the process
-
-# http://www.statmethods.net/interface/io.html</code></pre>
-<ul>
-<li>Salvara outputs para um ‘text file’<br />
-</li>
-</ul>
-<ol style="list-style-type: lower-alpha">
-<li>Usando sink() e imprimendo</li>
-</ol>
-<pre class="r"><code># a) Criar o ficheiro
-sink(&quot;meu_documento.txt&quot;)  
-
-#  b) Especificar um título interno
-print(&quot;The mean of var1 x is…&quot;) 
-
-# c) produzir os dados (o output será imprimido no .txt, não na CONSOLA)
-    mean (x)
-    plot (x)
-
-# d) Finalizar o procedimento:
-    sink()</code></pre>
-<p>b Usando sink() e cat()</p>
-<pre class="r"><code># a) Criar o ficheiro    
-sink(&quot;meu_documento.txt&quot;)
-
-# b) Concatenar    
-cat(&quot;A média de varX é...&quot;, mean(varX), &quot;\n&quot;) 
-
-# c) Finalizar o procedimento:
-sink()</code></pre>
-<ul>
-<li>Copy and paste.</li>
-</ul>
-<p>Uma opção frequente é simplesmente copiar os resultados da CONSOLA ou PLOTS colar num documento Word</p>
-<p><br> <br></p>
-<hr />
+<pre class="r"><code>t2per &lt;- cbind(Freq=t1, 
+               Cumul=cumsum(t1), 
+               Relative=prop.table(t1)*100, 
+               Cum.Rel.=cumsum(prop.table(t1)
+               *100))  ; 
+t2per</code></pre>
+<pre><code>##    Freq Cumul Relative Cum.Rel.
+## 0     1     1     6.25     6.25
+## 1     2     3    12.50    18.75
+## 11    2     5    12.50    31.25
+## 12    1     6     6.25    37.50
+## 14    2     8    12.50    50.00
+## 15    3    11    18.75    68.75
+## 16    1    12     6.25    75.00
+## 18    1    13     6.25    81.25
+## 19    3    16    18.75   100.00</code></pre>
 </div>
-<div id="importar-bases" class="section level2">
-<h2>Importar bases</h2>
+<div id="dicas" class="section level2">
+<h2>Dicas</h2>
+<p><a href="http://www.sthda.com/english/wiki/bar-plots-r-base-graphs" class="uri">http://www.sthda.com/english/wiki/bar-plots-r-base-graphs</a></p>
+<div id="pie-com-etiquetas-labels" class="section level3">
+<h3>Pie com etiquetas (<code>labels</code>)</h3>
+<pre class="r"><code>pie (table(stress), labels = c(&quot;Não&quot;, &quot;Sim&quot;))</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-13-1.png" width="672" /> <br></p>
 <ul>
-<li>Bases Excel:</li>
+<li><strong>Tabela</strong></li>
 </ul>
-<blockquote>
-<p><code>Environment</code> -&gt; <code>Import Dataset</code> -&gt; <code>From Excel</code></p>
-</blockquote>
-<ul>
-<li>Bases SPSS:</li>
-</ul>
-<blockquote>
-<p><code>Environment</code> -&gt; <code>Import Dataset</code> -&gt; <code>From SPSS</code></p>
-</blockquote>
-<ul>
-<li>Bases STATA:</li>
-</ul>
-<p><code>Environment</code> -&gt; <code>Import Dataset</code> -&gt; <code>From STATA</code></p>
-<p><br> <br></p>
-<hr />
-</div>
-<div id="exportar" class="section level2">
-<h2>Exportar</h2>
-<ul>
-<li>Para xlsx</li>
-</ul>
-<pre class="r"><code>library (openxlsx)   
-write.xlsx(Df, &quot;Df.xlsx&quot;)</code></pre>
+<pre class="r"><code>tx &lt;- table (stress)
+tx</code></pre>
+<pre><code>## stress
+## 0 1 
+## 9 7</code></pre>
 <p><br></p>
 <ul>
-<li>Para CSV</li>
+<li>Barplot, posição horizontal</li>
 </ul>
-<pre class="r"><code>library (openxlsx)   
-write.table(Df, file=&quot;Df.csv&quot;,sep=&quot;,&quot;,row.names=F)</code></pre>
+<pre class="r"><code>barplot(t.stress , horiz = TRUE)</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <br></p>
+<ul>
+<li>Mudar nome das categorías</li>
+</ul>
+<pre class="r"><code>barplot(t.stress, names.arg = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p><br></p>
 <ul>
-<li>Para SPSS</li>
+<li>Mudar cor interno e bordes</li>
 </ul>
-<pre class="r"><code>library(foreign)
-write.foreign(mydata, &quot;c:/mydata.txt&quot;, &quot;c:/mydata.sps&quot;,   package=&quot;SPSS&quot;)</code></pre>
-<p><br></p>
+<pre class="r"><code>barplot(t.stress, 
+        col = &quot;grey&quot;, 
+        border = &quot;blue&quot;) # Uma unica cor </code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-17-1.png" width="672" /> <br></p>
 <ul>
-<li>Para SPSS</li>
+<li>Mudar cor dos bordes, por categoria</li>
 </ul>
-<pre class="r"><code>library(foreign)
-write.dta(Df, &quot;Df.dta&quot;) </code></pre>
-<p><br> <br></p>
-<hr />
+<pre class="r"><code>barplot(t.stress, 
+        col = &quot;grey&quot;,                       
+        border = c(&quot;#999999&quot;, &quot;#E69F00&quot;)) # Cor por categoria </code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-18-1.png" width="672" /> <br></p>
+<ul>
+<li>Mudar cor interno</li>
+</ul>
+<pre class="r"><code>barplot(t.stress, col = &quot;steelblue&quot;)</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-19-1.png" width="672" /> <br></p>
+<ul>
+<li>Mudar cor interno, por categoria</li>
+</ul>
+<pre class="r"><code>barplot(t.stress, col = c(&quot;#999999&quot;, &quot;#E69F00&quot;))</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-20-1.png" width="672" /> <br></p>
+<ul>
+<li>Modificar titulo (<code>main title</code>) e etiqutas eixos (<code>axis labels</code>)</li>
+</ul>
+<pre class="r"><code>barplot(t.stress, 
+        main = &quot;Stress dos fumadores&quot;,
+        xlab = &quot;Stress&quot;, 
+        ylab = &quot;Frequência&quot;)</code></pre>
+<p><img src="k1_UniCAT_copy_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
-<div id="fechas-sessão" class="section level2">
-<h2>Fechas Sessão</h2>
-<pre class="r"><code>q()     # fechar sessão </code></pre>
+</div>
 </div>
 
 
